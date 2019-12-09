@@ -1,2 +1,10 @@
-import App from "./user-interface/view";
-export default App;
+import { h } from "preact";
+import { Provider } from "redux-zero/preact";
+import WeatherView from "./user-interface/view";
+import makeWeatherStore from "./application-model/data-sources";
+
+export default () => (
+  <Provider store={makeWeatherStore()}>
+    <WeatherView />
+  </Provider>
+);
