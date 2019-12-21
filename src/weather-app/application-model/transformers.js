@@ -1,3 +1,3 @@
 export const transformStoreDataToUIData = store => {
-  return { store };
+  return { location: store.location };
 };

@@ -1,3 +1,7 @@
 export const getDataChangers = store => {
-  return {};
+  return {
+    doSetLocation: (state, location) => {
+      return Object.assign({}, state, { location });
+    }
+  };
 };
