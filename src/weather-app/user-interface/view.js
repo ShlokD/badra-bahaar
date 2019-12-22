@@ -19,51 +19,78 @@ class LocationInput extends Component {
   onLocationInput(ev) {
     this.setState({
       enteredLocation: ev.target.value
-    })
+    });
   }
 
-  onSubmitLocation() {
-    this.props.onSetLocation(this.state.enteredLocation)
+  onSubmitLocation(ev) {
+    ev.preventDefault();
+    this.props.onSetLocation(this.state.enteredLocation);
   }
 
   render() {
-    return <div><input onChange={this.onLocationInput} placeholder="Enter city name"></input><button onClick={this.onSubmitLocation}>Show me the Cities!</button></div>
+    return (
+      <form
+        className="flex justify-center items-center"
+        onSubmit={this.onSubmitLocation}
+      >
+        <input
+          type="text"
+          className="button-reset br4 pa2 bw0 fw5 f2"
+          onChange={this.onLocationInput}
+          placeholder="Enter city name"
+        ></input>
+      </form>
+    );
   }
 }
 
 const LocationList = ({ locationList = [], doFetchWeather }) => {
-  return <div>
-    {locationList.map((locationItem) => {
-      return <button onClick={() => doFetchWeather(locationItem.woeid)}>{locationItem.title} </button>
-    })}
-  </div>
-}
+  return (
+    <div className="flex flex-column justify-evenly items-center h-100 w-40 pt4">
+      {locationList.map(locationItem => {
+        return (
+          <button
+            className="button-reset bw2 text-center b--solid f4 fw4 pt4"
+            onClick={() => doFetchWeather(locationItem.woeid)}
+          >
+            {locationItem.title}{" "}
+          </button>
+        );
+      })}
+    </div>
+  );
+};
 
 const ForecastList = ({ weatherForecast = {} }) => {
   const { forecast = [] } = weatherForecast;
 
-  return <div className="flex flex-row">
-    {forecast.map((forecastItem) => {
-      return (
-        <div>
-          <span>Minimum Temperature: {forecastItem.minimumTemperature}</span>
-          <span>Maximum Temperature: {forecastItem.maximumTemperature}</span>
-          <span>Prediction: {forecastItem.forecastType}</span>
-        </div>
-      );
-    })}
-  </div>
-}
-
+  return (
+    <div className="flex flex-column w-60 justify-evenly">
+      {forecast.map(forecastItem => {
+        return (
+          <div className="flex flex-column">
+            <span>Minimum Temperature: {forecastItem.minimumTemperature}</span>
+            <span>Maximum Temperature: {forecastItem.maximumTemperature}</span>
+            <span>Prediction: {forecastItem.forecastType}</span>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
 
 class WeatherView extends Component {
   render({ locationList, weatherForecast, doSetLocation, doFetchWeather }) {
-
     return (
-      <div>
+      <div className="h-100 flex flex-column pt6">
         <LocationInput onSetLocation={doSetLocation} />
-        <LocationList locationList={locationList} doFetchWeather={doFetchWeather} />
-        <ForecastList weatherForecast={weatherForecast} />
+        <div className="w-100 flex flex-row">
+          <LocationList
+            locationList={locationList}
+            doFetchWeather={doFetchWeather}
+          />
+          <ForecastList weatherForecast={weatherForecast} />
+        </div>
       </div>
     );
   }

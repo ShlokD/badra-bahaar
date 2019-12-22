@@ -1,18 +1,32 @@
 import { transformWeatherForecast } from "./transformers";
 
 export const getDataChangers = store => {
+  const { fetch } = window;
   return {
     doSetLocation: (state, location) => {
-      return fetch(`https://cors-anywhere.herokuapp.com/https://www.metaweather.com/api/location/search?query=${location}`, { mode: "cors" })
+      return fetch(
+        `https://cors-anywhere.herokuapp.com/https://www.metaweather.com/api/location/search?query=${location}`,
+        { mode: "cors" }
+      )
         .then(response => response.json())
         .then(responseJSON => {
-          return Object.assign({}, state, { locationList: responseJSON, location })
-        })
+          return Object.assign({}, state, {
+            locationList: responseJSON,
+            location
+          });
+        });
     },
     doFetchWeather: (state, woeid) => {
-      return fetch(`https://cors-anywhere.herokuapp.com/https://www.metaweather.com/api/location/${woeid}`, { mode: "cors" }).then(response => response.json()).then(responseJSON => {
-        return Object.assign({}, state, { weatherForecast: transformWeatherForecast(responseJSON) })
-      })
+      return fetch(
+        `https://cors-anywhere.herokuapp.com/https://www.metaweather.com/api/location/${woeid}`,
+        { mode: "cors" }
+      )
+        .then(response => response.json())
+        .then(responseJSON => {
+          return Object.assign({}, state, {
+            weatherForecast: transformWeatherForecast(responseJSON)
+          });
+        });
     }
   };
-}
+};

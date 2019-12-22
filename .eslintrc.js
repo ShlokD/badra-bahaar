@@ -21,6 +21,9 @@ module.exports = {
   rules: {
     quotes: [2, "double"],
     semi: [2, "always"],
-    "space-before-function-paren": [0, "never"]
+    "space-before-function-paren": [0, "never"],
+    "jsx-quotes": [2, "prefer-double"],
+    "react/self-closing-comp": [0, { component: true, html: true}],
+    "comma-dangle": [0, "never"]
   }
 };
