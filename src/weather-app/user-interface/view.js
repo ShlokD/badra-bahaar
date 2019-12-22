@@ -5,7 +5,7 @@ import { getDataChangers } from "../application-model/changers";
 import { transformStoreDataToUIData } from "../application-model/transformers";
 import "./style.css";
 
-class WeatherInput extends Component {
+class LocationInput extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -27,17 +27,43 @@ class WeatherInput extends Component {
   }
 
   render() {
-    return <div><input onChange={this.onLocationInput} placeholder="Enter city name"></input><button onClick={this.onSubmitLocation}>Show me the Weather!</button></div>
+    return <div><input onChange={this.onLocationInput} placeholder="Enter city name"></input><button onClick={this.onSubmitLocation}>Show me the Cities!</button></div>
   }
+}
+
+const LocationList = ({ locationList = [], doFetchWeather }) => {
+  return <div>
+    {locationList.map((locationItem) => {
+      return <button onClick={() => doFetchWeather(locationItem.woeid)}>{locationItem.title} </button>
+    })}
+  </div>
+}
+
+const ForecastList = ({ weatherForecast = {} }) => {
+  const { forecast = [] } = weatherForecast;
+
+  return <div className="flex flex-row">
+    {forecast.map((forecastItem) => {
+      return (
+        <div>
+          <span>Minimum Temperature: {forecastItem.minimumTemperature}</span>
+          <span>Maximum Temperature: {forecastItem.maximumTemperature}</span>
+          <span>Prediction: {forecastItem.forecastType}</span>
+        </div>
+      );
+    })}
+  </div>
 }
 
 
 class WeatherView extends Component {
-  render({ location, doSetLocation }) {
+  render({ locationList, weatherForecast, doSetLocation, doFetchWeather }) {
+
     return (
       <div>
-        <WeatherInput onSetLocation={doSetLocation} />
-        <p>{location}</p>
+        <LocationInput onSetLocation={doSetLocation} />
+        <LocationList locationList={locationList} doFetchWeather={doFetchWeather} />
+        <ForecastList weatherForecast={weatherForecast} />
       </div>
     );
   }
@@ -47,4 +73,3 @@ export default connect(
   transformStoreDataToUIData,
   getDataChangers
 )(WeatherView);
- 

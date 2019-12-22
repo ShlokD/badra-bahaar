@@ -2,7 +2,8 @@ import createStore from "redux-zero";
 
 export const getInitialState = () => ({
   location: "",
-  weather: {}
+  locationList: [],
+  weatherForecast: []
 });
 
 const makeWeatherStore = () => createStore(getInitialState);

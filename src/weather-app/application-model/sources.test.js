@@ -6,7 +6,7 @@ describe("Weather App Data Store", () => {
     let expected;
 
     test("creates an initial state object", () => {
-      expected = { location: "", weather: {} };
+      expected = { location: "", locationList: [], weatherForecast: [] };
       actual = getInitialState();
       expect(actual).toEqual(expected);
     });
