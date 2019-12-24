@@ -16,7 +16,6 @@ const weatherChar = {
   Clear: "0x2600"
 };
 
-
 const DEGREE_SYMBOL = String.fromCharCode(0x00b0);
 
 class LocationInput extends Component {
@@ -84,8 +83,8 @@ const ForecastList = ({ weatherForecast = {} }) => {
           const weatherCharCode = weatherChar[forecastType] || "0x2600";
           return (
             <div className="flex flex-column pa2 bg-light-gray ma2 items-center w-20 br3 shadow-5">
-              <span className="f4">{date}</span>
-           
+              <span>{date}</span>
+
               <span className="f-5 dark-blue">
                 {String.fromCodePoint(weatherCharCode)}
               </span>
