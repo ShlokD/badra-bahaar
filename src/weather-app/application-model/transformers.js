@@ -12,12 +12,11 @@ export const transformForecast = forecast => {
     minimumTemperature: Math.round(forecast.min_temp),
     maximumTemperature: Math.round(forecast.max_temp),
     forecastType: forecast.weather_state_name,
-    date: `${forecastDate.getDate()} - ${forecastDate.getMonth() + 1} - ${forecastDate.getFullYear()}`
+    date: `${forecastDate.getDate()} - ${forecastDate.getMonth() +
+      1} - ${forecastDate.getFullYear()}`
   };
 };
 
-export const transformWeatherForecast = weatherForecast => {
-  return {
-    forecast: weatherForecast.consolidated_weather.map(transformForecast)
-  };
-};
+export const transformWeatherForecast = weatherForecast => ({
+  forecast: weatherForecast.consolidated_weather.map(transformForecast)
+});
