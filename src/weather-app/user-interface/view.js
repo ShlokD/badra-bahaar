@@ -6,8 +6,18 @@ import { transformStoreDataToUIData } from "../application-model/transformers";
 import "./style.css";
 
 const weatherChar = {
-  Snow: "0x1F328"
+  Snow: "0x1F328",
+  Thunderstorm: "0x26C8",
+  "Heavy Rain": "0x1F327",
+  "Light Rain": "0x1F327",
+  Showers: "0x1F326",
+  "Heavy Cloud": "0x2601",
+  "Light Cloud": "0x1F324",
+  Clear: "0x2600"
 };
+
+
+const DEGREE_SYMBOL = String.fromCharCode(0x00b0);
 
 class LocationInput extends Component {
   constructor(props) {
@@ -54,7 +64,7 @@ const LocationList = ({ locationList = [], doFetchWeather }) => {
       {locationList.map(locationItem => {
         return (
           <button
-            className="button-reset bw2 text-center b--solid f4 fw4 pa4 bg-transparent"
+            className="cursor-pointer button-reset bw2 text-center b--solid f4 fw4 pa4 bg-transparent br4 shadow-5 mt4"
             onClick={() => doFetchWeather(locationItem.woeid)}
           >
             {locationItem.title}{" "}
@@ -68,19 +78,26 @@ const LocationList = ({ locationList = [], doFetchWeather }) => {
 const ForecastList = ({ weatherForecast = {} }) => {
   const { forecast = [] } = weatherForecast;
   return (
-    <div className="flex flex-row h-60 w-100 justify-evenly">
-      {forecast.map(forecastItem => {
-        const weatherCharCode = weatherChar[forecastItem] || "0x1F328";
-        return (
-          <div className="flex flex-column pa4 bg-light-yellow mt2 mb2 items-center">
-            <span className="f-3">
-              {forecastItem.minimumTemperature} -{" "}
-              {forecastItem.maximumTemperature}
-            </span>
-            <span className="f-5">{String.fromCodePoint(weatherCharCode)}</span>
-          </div>
-        );
-      })}
+    <div className="flex flex-row h-80 w-100 justify-evenly pa2 mt5">
+      {forecast.map(
+        ({ forecastType, minimumTemperature, maximumTemperature, date }) => {
+          const weatherCharCode = weatherChar[forecastType] || "0x2600";
+          return (
+            <div className="flex flex-column pa2 bg-light-gray ma2 items-center w-20 br3 shadow-5">
+              <span className="f4">{date}</span>
+           
+              <span className="f-5 dark-blue">
+                {String.fromCodePoint(weatherCharCode)}
+              </span>
+
+              <span className="f4">
+                {`${minimumTemperature}${DEGREE_SYMBOL}C`} -{" "}
+                {`${maximumTemperature}${DEGREE_SYMBOL}C`}
+              </span>
+            </div>
+          );
+        }
+      )}
     </div>
   );
 };
@@ -88,7 +105,7 @@ const ForecastList = ({ weatherForecast = {} }) => {
 class WeatherView extends Component {
   render({ locationList, weatherForecast, doSetLocation, doFetchWeather }) {
     return (
-      <div className="h-100 flex flex-column pt6">
+      <div className="h-100 flex flex-column pa6">
         <LocationInput onSetLocation={doSetLocation} />
         <div className="w-100 flex flex-column">
           <LocationList

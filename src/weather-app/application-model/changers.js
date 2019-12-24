@@ -1,7 +1,6 @@
 import { transformWeatherForecast } from "./transformers";
 
 export const getDataChangers = store => {
-  const { fetch } = window;
   return {
     doSetLocation: (state, location) => {
       return fetch(
