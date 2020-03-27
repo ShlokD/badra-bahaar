@@ -26,6 +26,6 @@ export const getDataChangers = store => {
             weatherForecast: transformWeatherForecast(responseJSON)
           });
         });
-    }
+    },
   };
 };

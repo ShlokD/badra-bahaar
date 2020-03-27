@@ -18,11 +18,14 @@ const weatherChar = {
 
 const DEGREE_SYMBOL = String.fromCharCode(0x00b0);
 
+export const Loader = () => <div className="mv4 pv4 loading"></div>;
+
 class LocationInput extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      enteredLocation: ""
+      enteredLocation: "",
+      loading: false
     };
 
     this.onLocationInput = this.onLocationInput.bind(this);
@@ -37,42 +40,73 @@ class LocationInput extends Component {
 
   onSubmitLocation(ev) {
     ev.preventDefault();
-    this.props.onSetLocation(this.state.enteredLocation);
+    this.setState({ loading: true });
+    this.props
+      .onSetLocation(this.state.enteredLocation)
+      .then(() => this.setState({ loading: false }));
   }
 
   render() {
+    const { loading } = this.state;
+
     return (
-      <form
-        className="flex justify-center items-center"
-        onSubmit={this.onSubmitLocation}
-      >
-        <input
-          type="text"
-          className="button-reset br4 pa2 bw0 fw5 f2"
-          onChange={this.onLocationInput}
-          placeholder="Enter city name"
-        ></input>
-      </form>
+      <div className="flex flex-column items-center">
+        <form
+          className="flex justify-center items-center"
+          onSubmit={this.onSubmitLocation}
+        >
+          <input
+            type="text"
+            className="button-reset br4 pa2 bw0 fw5 f2"
+            onChange={this.onLocationInput}
+            placeholder="Enter city name"
+          ></input>
+        </form>
+        {loading && <Loader />}
+      </div>
     );
   }
 }
 
-const LocationList = ({ locationList = [], doFetchWeather }) => {
-  return (
-    <div className="flex flex-row flex-wrap justify-evenly items-center w-100 h-40 pt4">
-      {locationList.map(locationItem => {
-        return (
-          <button
-            className="cursor-pointer button-reset bw2 text-center b--solid f4 fw4 pa4 bg-transparent br4 shadow-5 mt4"
-            onClick={() => doFetchWeather(locationItem.woeid)}
-          >
-            {locationItem.title}{" "}
-          </button>
-        );
-      })}
-    </div>
-  );
-};
+class LocationList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: false
+    };
+
+    this.fetchWeather = this.fetchWeather.bind(this);
+  }
+
+  fetchWeather(woeid) {
+    const { doFetchWeather } = this.props;
+    this.setState({ loading: true });
+    return doFetchWeather(woeid).then(() => this.setState({ loading: false }));
+  }
+
+  render() {
+    const { locationList = [] } = this.props;
+    const { loading } = this.state;
+
+    return (
+      <div className="flex flex-column items-center">
+        <div className="flex flex-row flex-wrap justify-evenly items-center w-100 h-40 pt4">
+          {locationList.map(locationItem => {
+            return (
+              <button
+                className="cursor-pointer button-reset bw2 text-center b--solid f4 fw4 pa4 bg-transparent br4 shadow-5 mt4"
+                onClick={() => this.fetchWeather(locationItem.woeid)}
+              >
+                {locationItem.title}{" "}
+              </button>
+            );
+          })}
+        </div>
+        {loading && <Loader />}
+      </div>
+    );
+  }
+}
 
 const ForecastList = ({ weatherForecast = {} }) => {
   const { forecast = [] } = weatherForecast;
