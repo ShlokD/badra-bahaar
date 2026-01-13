@@ -37,7 +37,7 @@
     "if-env": "^1.0.0",
     "isomorphic-fetch": "^2.2.1",
     "jest": "^24.9.0",
-    "mocha": "^6.2.2",
+    "mocha": "^11.7.5",
     "preact-cli": "^2.0.0"
   },
   "dependencies": {
